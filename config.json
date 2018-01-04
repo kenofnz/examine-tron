@@ -1,0 +1,20 @@
+{
+  "wingRoles": [
+    "Bachelor of the Vale (W1)",
+    "Bachelor of Salvation (W2)",
+    "Bachelor of the Stronghold (W3)",
+    "Bachelor of the Bastion (W4)",
+    "Bachelor of the Hall (W5)"
+  ],
+  "wingClearName": [
+    "Spirit Vale :white_check_mark:",
+    "Salvation Pass :white_check_mark:",
+    "Stronghold of the Faithful :white_check_mark:",
+    "Bastion of the Penitent :white_check_mark:"
+  ],
+  "mastersNumberOfWings": "4",
+  "phdNumberOfWings": "5",
+  "undergradRole": "Undergraduate",
+  "mastersRole": "Masters in Raiding",
+  "phdRole": "Ph.D in Raiding"
+}
