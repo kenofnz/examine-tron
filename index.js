@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 function hasDegree(userServerMember, wingRoles, wingNumber){
-  return userServerMember.roles.find(role => role === wingRoles[wingNumber]) !== null;
+  return userServerMember.roles.find(role => role.equals(wingRoles[wingNumber])) !== null;
 }
 
 function checkGW2BotMessage(userServerMember, wingRoles, message) {
@@ -15,13 +15,21 @@ function checkGW2BotMessage(userServerMember, wingRoles, message) {
     const wings = embedMessage.fields;
     
     var receiveMasters = true;
+    var earnedDegrees = [];
     for (let j = 0; j < wings.length && j < wingRoles.length; j += 1 ){
   	  if (wings[j].name === config.wingClearName[j]) {
-  	  	console.log(`${userServerMember.displayName}: Earned ${wingRoles[j].name}`);
-  	  	userServerMember.addRole(wingRoles[j]);
+        if (!hasDegree(userServerMember, wingRoles, j)) {
+          console.log(`${userServerMember.displayName}: Earned ${wingRoles[j].name}`);
+          earnedDegrees.push(wingRoles[j].name);
+          userServerMember.addRole(wingRoles[j]);
+        }
   	  } else {
   	  	receiveMasters = false;
   	  }
+    }
+
+    if (earnedDegrees.length > 0) {
+      message.channel.send(`<@${userServerMember.id}> You've earned ${earnedDegrees.join(', ')}! <:OoO:395377784895045633>`);
     }
     return receiveMasters;
   }
@@ -75,16 +83,17 @@ client.on('message', async message => {
       }
     }
   }
-
+  
   if (receiveMasters &&
-   (userServerMember.roles.find(role => role === undergradRole) !== null
-    || userServerMember.roles.find(role => role === mastersRole) === null)) {
+   (userServerMember.roles.find(role => role.equals(undergradRole)) !== null
+    || userServerMember.roles.find(role => role.equals(mastersRole)) === null)) {
   	console.log(`${userServerMember.displayName}: Has met requirements for Masters`);
     userServerMember.addRole(mastersRole);
     userServerMember.removeRole(undergradRole);
     message.channel.send(`<@${userServerMember.id}> Congratulations on your Masters degree! :tada:`);
   }
 
+  console.log(`${userServerMember.displayName}: Done`);
 });
 
 client.login(process.env.TOKEN);
