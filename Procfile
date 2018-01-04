@@ -1,1 +1,1 @@
-web: node index.js
+discord: node index.js

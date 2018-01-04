@@ -15,7 +15,7 @@ function checkGW2BotMessage(userServerMember, wingRoles, message) {
     const wings = embedMessage.fields;
     
     var receiveMasters = true;
-    for (let j = 0; j < wings.length; j += 1 ){
+    for (let j = 0; j < wings.length && j < wingRoles.length; j += 1 ){
   	  if (wings[j].name === config.wingClearName[j]) {
   	  	console.log(`${userServerMember.nickname}: Earned ${wingRoles[j].name}`);
   	  	userServerMember.addRole(wingRoles[j]);
@@ -57,8 +57,7 @@ client.on('message', async message => {
   const userServerMember = server.member(requestingUser);
   console.log(`${author.username} boss check from ${userServerMember.nickname}`);
 
-  //Check bosses message for degrees
-
+  //Check $bosses message for degrees
   console.log(`${userServerMember.nickname}: Updating degrees...`);
   var receiveMasters = checkGW2BotMessage(userServerMember, wingRoles, message);
 
