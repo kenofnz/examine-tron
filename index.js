@@ -17,7 +17,7 @@ function checkGW2BotMessage(userServerMember, wingRoles, message) {
     var receiveMasters = true;
     for (let j = 0; j < wings.length && j < wingRoles.length; j += 1 ){
   	  if (wings[j].name === config.wingClearName[j]) {
-  	  	console.log(`${userServerMember.nickname}: Earned ${wingRoles[j].name}`);
+  	  	console.log(`${userServerMember.displayName}: Earned ${wingRoles[j].name}`);
   	  	userServerMember.addRole(wingRoles[j]);
   	  } else {
   	  	receiveMasters = false;
@@ -55,18 +55,22 @@ client.on('message', async message => {
 
   const requestingUser = message.mentions.users.first();
   const userServerMember = server.member(requestingUser);
-  console.log(`${author.username} boss check from ${userServerMember.nickname}`);
+
+  if (userServerMember.nickname === null){
+    message.channel.send(`<@${userServerMember.id}> could you change your nickname to match your GW2 account name please? :OoO:`);
+  }
+  console.log(`${author.username} boss check from ${userServerMember.displayName}`);
 
   //Check $bosses message for degrees
-  console.log(`${userServerMember.nickname}: Updating degrees...`);
+  console.log(`${userServerMember.displayName}: Updating degrees...`);
   var receiveMasters = checkGW2BotMessage(userServerMember, wingRoles, message);
 
-  console.log(`${userServerMember.nickname}: Checking Masters requirement...`);
+  console.log(`${userServerMember.displayName}: Checking Masters requirement...`);
   if (!receiveMasters) {
   	receiveMasters = true;
     for (let i = 0; i < config.mastersNumberOfWings; i = i + 1) {
       if (!hasDegree(userServerMember, wingRoles, i)) {
-  	    console.log(`${userServerMember.nickname}: Does not have ${wingRoles[i].name}`);
+  	    console.log(`${userServerMember.displayName}: Does not have ${wingRoles[i].name}`);
   	    receiveMasters = false;
       }
     }
@@ -75,7 +79,7 @@ client.on('message', async message => {
   if (receiveMasters &&
    (userServerMember.roles.find(role => role === undergradRole) !== null
     || userServerMember.roles.find(role => role === mastersRole) === null)) {
-  	console.log(`${userServerMember.nickname}: Has met requirements for Masters`);
+  	console.log(`${userServerMember.displayName}: Has met requirements for Masters`);
     userServerMember.addRole(mastersRole);
     userServerMember.removeRole(undergradRole);
     message.channel.send(`<@${userServerMember.id}> Congratulations on your Masters degree! :tada:`);
