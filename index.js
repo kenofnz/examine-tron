@@ -64,9 +64,12 @@ client.on('message', async message => {
   const requestingUser = message.mentions.users.first();
   const userServerMember = server.member(requestingUser);
 
+  /*
   if (userServerMember.nickname === null){
     message.channel.send(`<@${userServerMember.id}> could you change your nickname to match your GW2 account name please? <:OoO:395377784895045633>`);
   }
+  */
+  
   console.log(`${author.username} boss check from ${userServerMember.displayName}`);
 
   //Check $bosses message for degrees
