@@ -34,13 +34,28 @@ function checkGW2BotMessage(userServerMember, wingRoles, message) {
   }
 }
 
-// The ready event is vital, it means that your bot will only start reacting to information
-// from Discord _after_ ready is emitted
-client.on('ready', () => {
-  console.log('I am ready to hand out some degrees!');
-});
+function assignClassRole(message, classRoleName){
+  const author = message.author;
 
-client.on('message', async message => {
+   //Make sure its not a bot
+  if(author.bot) return;
+
+  const server = message.guild;
+  const roles = server.roles;
+  const classRole = roles.find(role => role.name === classRoleName);
+
+  const userServerMember = server.member(message.author);
+
+  if (userServerMember.roles.find(role => role.equals(classRole)) !== null) {
+    userServerMember.removeRole(classRole);
+    console.log(`${userServerMember.displayName}: Removed ${classRole.name} role`);
+  } else {
+    userServerMember.addRole(classRole);
+    console.log(`${userServerMember.displayName}: Added ${classRole.name} role`);
+  }
+}
+
+function assignDegreeRole(message){
   const author = message.author;
 
    //Make sure its GW2Bot
@@ -56,9 +71,6 @@ client.on('message', async message => {
   for (let i = 0; i < config.wingRoles.length; i += 1 ){
     wingRoles.push(roles.find(role => role.name === config.wingRoles[i]));
   }
-
-  //Make sure its the '$bosses' command
-  if(message.content.match(/.+, here are your raid bosses:/) == null) return;
 
   const requestingUser = message.mentions.users.first();
   const userServerMember = server.member(requestingUser);
@@ -80,8 +92,8 @@ client.on('message', async message => {
   if (earnedRoles.length < config.mastersNumberOfWings) {
     for (let i = 0; i < config.mastersNumberOfWings; i = i + 1) {
       if (!hasDegree(userServerMember, earnedRoles, wingRoles, i)) {
-  	    console.log(`${userServerMember.displayName}: Does not have ${wingRoles[i].name}`);
-  	    receiveMasters = false;
+        console.log(`${userServerMember.displayName}: Does not have ${wingRoles[i].name}`);
+        receiveMasters = false;
       }
     }
   }
@@ -89,13 +101,35 @@ client.on('message', async message => {
   if (receiveMasters &&
    (userServerMember.roles.find(role => role.equals(undergradRole)) !== null
     || userServerMember.roles.find(role => role.equals(mastersRole)) === null)) {
-  	console.log(`${userServerMember.displayName}: Has met requirements for Masters`);
+    console.log(`${userServerMember.displayName}: Has met requirements for Masters`);
     userServerMember.addRole(mastersRole);
     userServerMember.removeRole(undergradRole);
     message.channel.send(`<@${userServerMember.id}> Congratulations on your Masters degree! :tada:`);
   }
 
   console.log(`${userServerMember.displayName}: Done`);
+}
+
+// The ready event is vital, it means that your bot will only start reacting to information
+// from Discord _after_ ready is emitted
+client.on('ready', () => {
+  console.log('I am ready to hand out some degrees!');
+});
+
+client.on('message', async message => {
+  //Make sure its the '!<some role>' command
+  for (let i = 0; i < config.classRoles.length; i += 1 ) {
+    if(message.content === `!${config.classRoles[i]}`) {
+      assignClassRole(message, config.classRoles[i]);
+      return;
+    } 
+  }
+
+  //Make sure its the '$bosses' command
+  if(message.content.match(/.+, here are your raid bosses:/) != null) {
+    assignDegreeRole(message);
+    return;
+  }
 });
 
 client.login(process.env.TOKEN);

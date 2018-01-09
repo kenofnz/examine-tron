@@ -16,5 +16,13 @@
   "phdNumberOfWings": "5",
   "undergradRole": "Undergraduate",
   "mastersRole": "Masters in Raiding",
-  "phdRole": "Ph.D in Raiding"
+  "phdRole": "Ph.D in Raiding",
+  "classRoles": [
+    "DPS",
+    "Druid",
+    "Chronotank",
+    "Offchrono",
+    "Banner",
+    "Auramancer"
+  ]
 }
