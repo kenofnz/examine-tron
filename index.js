@@ -49,9 +49,11 @@ function assignClassRole(message, classRoleName){
   if (userServerMember.roles.find(role => role.equals(classRole)) !== null) {
     userServerMember.removeRole(classRole);
     console.log(`${userServerMember.displayName}: Removed ${classRole.name} role`);
+    message.channel.send(`<@${userServerMember.id}> Removed your ${classRole.name} role.`);
   } else {
     userServerMember.addRole(classRole);
     console.log(`${userServerMember.displayName}: Added ${classRole.name} role`);
+    message.channel.send(`<@${userServerMember.id}> Added ${classRole.name} role.`);
   }
 }
 
