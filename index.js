@@ -5,8 +5,8 @@ const Discord = require('discord.js');
 // Create an instance of a Discord client
 const client = new Discord.Client();
 
-function hasDegree(userServerMember, wingRoles, wingNumber){
-  return userServerMember.roles.find(role => role.equals(wingRoles[wingNumber])) !== null;
+function hasDegree(userServerMember, earnedRoles, wingRoles, wingNumber){
+  return userServerMember.roles.find(role => role.equals(wingRoles[wingNumber])) !== null || earnedRoles.find(role => role === wingRoles[wingNumber]);
 }
 
 function checkGW2BotMessage(userServerMember, wingRoles, message) {
@@ -14,24 +14,23 @@ function checkGW2BotMessage(userServerMember, wingRoles, message) {
   	const embedMessage = message.embeds[i]
     const wings = embedMessage.fields;
     
-    var receiveMasters = true;
     var earnedDegrees = [];
+    var earnedRoles = [];
     for (let j = 0; j < wings.length && j < wingRoles.length; j += 1 ){
   	  if (wings[j].name === config.wingClearName[j]) {
-        if (!hasDegree(userServerMember, wingRoles, j)) {
+        if (!hasDegree(userServerMember, earnedDegrees, wingRoles, j)) {
           console.log(`${userServerMember.displayName}: Earned ${wingRoles[j].name}`);
           earnedDegrees.push(wingRoles[j].name);
+          earnedRoles.push(wingRoles[j]);
           userServerMember.addRole(wingRoles[j]);
         }
-  	  } else {
-  	  	receiveMasters = false;
   	  }
     }
 
     if (earnedDegrees.length > 0) {
       message.channel.send(`<@${userServerMember.id}> You've earned ${earnedDegrees.join(', ')}! <:OoO:395377784895045633>`);
     }
-    return receiveMasters;
+    return earnedRoles;
   }
 }
 
@@ -74,13 +73,13 @@ client.on('message', async message => {
 
   //Check $bosses message for degrees
   console.log(`${userServerMember.displayName}: Updating degrees...`);
-  var receiveMasters = checkGW2BotMessage(userServerMember, wingRoles, message);
+  var earnedRoles = checkGW2BotMessage(userServerMember, wingRoles, message);
 
   console.log(`${userServerMember.displayName}: Checking Masters requirement...`);
-  if (!receiveMasters) {
-  	receiveMasters = true;
+  var receiveMasters = true;
+  if (earnedRoles.length < config.mastersNumberOfWings) {
     for (let i = 0; i < config.mastersNumberOfWings; i = i + 1) {
-      if (!hasDegree(userServerMember, wingRoles, i)) {
+      if (!hasDegree(userServerMember, earnedRoles, wingRoles, i)) {
   	    console.log(`${userServerMember.displayName}: Does not have ${wingRoles[i].name}`);
   	    receiveMasters = false;
       }
