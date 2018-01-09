@@ -122,7 +122,7 @@ client.on('message', async message => {
   //Make sure its the '!<some role>' command
   for (let i = 0; i < config.classRoles.length; i += 1 ) {
     if(message.content.toLowerCase() === `!${config.classRoles[i].toLowerCase()}`) {
-      assignClassRole(message, config.classRoles[i]);
+      //assignClassRole(message, config.classRoles[i]);
       return;
     } 
   }
