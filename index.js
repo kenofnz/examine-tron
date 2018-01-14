@@ -110,10 +110,10 @@ function assignDegreeRole(message) {
   }
 
   if (hasDegree(userServerMember, earnedRoles, wingRoles, 4) &&
-      userServerMember.roles.find(role => role.equals(mastersRole)) !== null &&
+      (receiveMasters || userServerMember.roles.find(role => role.equals(mastersRole)) !== null) &&
       userServerMember.roles.find(role => role.equals(phdRole)) === null) {
     userServerMember.addRole(phdRole);
-	  userServerMember.removeRole(undergradRole);
+    userServerMember.removeRole(undergradRole);
     message.channel.send(`<@${userServerMember.id}> Congratulations on your ${phdRole.name}! :tada:`);
   }
 
