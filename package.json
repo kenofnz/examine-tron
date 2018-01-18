@@ -9,6 +9,7 @@
   "author": "Ken Kwan",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.2.1"
+    "discord.js": "^11.2.1",
+    "moment-timezone": "^0.5.14"
   }
 }

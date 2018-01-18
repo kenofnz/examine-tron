@@ -1,6 +1,7 @@
 // Import the discord.js module
 const config = require('./config.json');
 const Discord = require('discord.js');
+const timezone = require('./timezone');
 
 // Create an instance of a Discord client
 const client = new Discord.Client();
@@ -138,6 +139,12 @@ client.on('message', async message => {
   //Make sure its the '$bosses' command
   if (message.content.match(/.+, here are your raid bosses:/) != null) {
     assignDegreeRole(message);
+    return;
+  }
+
+    //Make sure its the '!kentime' command
+  if (message.content.toLowerCase().match(/!kentime .+/) != null) {
+    message.channel.send(`<@${message.author.id}>`, timezone.convertTime(message.content));
     return;
   }
 });
