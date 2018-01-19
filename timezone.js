@@ -14,6 +14,7 @@ module.exports.convertTime = function(message) {
 
   convertedTimes.push(kenTime.clone().tz("America/Los_Angeles"));
   convertedTimes.push(kenTime.clone().tz("America/New_York"));
+  convertedTimes.push(kenTime.clone().tz("America/Phoenix"));
   convertedTimes.push(kenTime.clone().tz("Europe/Paris"));
   convertedTimes.push(kenTime.clone().tz("Australia/Melbourne"));
   convertedTimes.push(kenTime.clone().tz("Asia/Singapore"));
