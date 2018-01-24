@@ -143,7 +143,7 @@ client.on('message', async message => {
   }
 
     //Make sure its the '!kentime' command
-  if (message.content.toLowerCase().match(/!kentime .+/) != null) {
+  if (message.content.toLowerCase().match(/!kentime.+/) != null) {
     message.channel.send(`<@${message.author.id}>`, timezone.convertTime(message.content));
     return;
   }
