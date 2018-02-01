@@ -92,12 +92,10 @@ function assignDegreeRole(message) {
 
   console.log(`${userServerMember.displayName}: Checking Masters requirement...`);
   var receiveMasters = true;
-  if (earnedRoles.length < config.mastersNumberOfWings) {
-    for (let i = 0; i < config.mastersNumberOfWings; i = i + 1) {
-      if (!hasDegree(userServerMember, earnedRoles, wingRoles, i)) {
-        console.log(`${userServerMember.displayName}: Does not have ${wingRoles[i].name}`);
-        receiveMasters = false;
-      }
+  for (let i = 0; i < config.mastersNumberOfWings; i = i + 1) {
+    if (!hasDegree(userServerMember, earnedRoles, wingRoles, i)) {
+      console.log(`${userServerMember.displayName}: Does not have ${wingRoles[i].name}`);
+      receiveMasters = false;
     }
   }
 
@@ -107,7 +105,7 @@ function assignDegreeRole(message) {
     console.log(`${userServerMember.displayName}: Has met requirements for Masters`);
     userServerMember.addRole(mastersRole);
     userServerMember.removeRole(undergradRole);
-    message.channel.send(`<@${userServerMember.id}> Congratulations on your Masters degree! :tada:`);
+    message.channel.send(`<@${userServerMember.id}> Congratulations on your ${mastersRole.name}! :tada:`);
   }
 
   if (hasDegree(userServerMember, earnedRoles, wingRoles, 4) &&
