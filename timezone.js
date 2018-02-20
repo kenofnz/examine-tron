@@ -30,8 +30,9 @@ module.exports.convertTime = function(message) {
 
 
   richMessage.setTitle(`Here are the converted times for ${args[1]} ${args[2]} from Ken's timezone ${kenTime.format('zz')}`);
+
   for (let i = 0; i < convertedTimes.length; i = i + 1) {
-    richMessage.addField(convertedTimes[i].format('zz'), convertedTimes[i].format('hh:mm A'));
+    richMessage.addField(convertedTimes[i].format('zz'), convertedTimes[i].format('hh:mm A'), true);
   };
   return richMessage;
 }
